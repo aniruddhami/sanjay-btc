@@ -1,0 +1,77 @@
+<br>
+<div class="container-fluid ">
+  <center>
+    <div class="card text-center" style="width: 250px">
+      <div class="card-header">
+        New Transaction
+      </div>
+      <div class="card-body">
+        
+        <%= form_with(model: transaction, local: true) do |form| %>
+          <% if transaction.errors.any? %>
+            <div id="error_explanation">
+              
+              <% transaction.errors.full_messages.each do |message| %>
+                <li style="color: red"><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="form-group">
+            <%= form.label :receiver_account_Number %>
+            <%= form.text_field :account_no, id: :transaction_account_no,:class => "form-control",:required =>"true" %>
+             <label id="accountError" style="color: red;display:none;">Account Same as your account</label>
+          </div>
+          <div class="form-group">
+            <%= form.text_field :receiver_account_no, id: :transaction_receiver_account_no,:hidden => "true",value: current_user.account_no %>
+          </div>
+          <div class="form-group">
+            <%= form.check_box :transaction_type, id: :transaction_transaction_type,:hidden => "true" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :amount%>
+            <%= form.text_field :amount, id: :transaction_amount,:type => "number",:min => "1",:class => "form-control",required: "true" %>
+            <label id="amountError" style="color: red;display:none;">Amount Not greater than Your Balance</label>
+          </div>
+
+          <div class="actions">
+            <%= form.submit "Send Money",:class => "btn btn-info",:id => "sumbit" %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </center>
+</div>
+<script type="text/javascript">
+  $("#transaction_amount").on('change keyup paste', function() {
+
+     if ($(this).val() > <%=current_user.balance %> ) {
+        $("#amountError").css("display","block");
+        $("#sumbit").attr("disabled",true); 
+      }
+     else
+      { 
+        $("#amountError").css("display","none");
+        $("#sumbit").removeAttr("disabled");
+      }  
+
+      
+
+
+  });
+  $("#transaction_account_no").on('change keyup paste', function() {
+    if ($("#transaction_account_no").val() == <%=current_user.account_no %> ) {
+        $("#accountError").css("display","block");
+        $("#sumbit").attr("disabled",true); 
+      }
+      else
+      {
+        $("#accountError").css("display","none");
+        $("#sumbit").removeAttr("disabled");
+      }
+  });
+
+</script>

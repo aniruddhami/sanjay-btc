@@ -1,0 +1,118 @@
+<div class="container">
+  <h1>Account Details</h1>
+  <div class="row">
+    <!-- Menu Start-->
+    <div class="shadow p-5  col-sm-4" style="background-color:#ccffb3;height:450px">
+        <div class="text-center">
+            <h2>Quick Link's</h2>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="color:white">
+              <%= link_to "Transfer Funds", new_transaction_path,:class => "btn btn-info btn-lg",
+              :style => "width:180px" %>
+            </li>
+            <li class="list-group-item" style="color:white">
+                <a  title="View All " class="btn btn-info btn-lg" data-toggle="modal" data-target="#exampleModalScrollable" style="width:180px">All Transaction</a>
+            </li>
+            <li class="list-group-item" style="color:white">
+                <a  title="Open FD/RD" class="btn btn-info btn-lg" style="width:180px">Open FD/RD</a>
+            </li>
+            <li class="list-group-item" style="color:white">
+                <a  title="Pay Bills" class="btn btn-info btn-lg" style="width:180px">Pay Bills</a>
+            </li>
+        </ul>
+    </div>
+    <!-- Menu End-->
+    <!-- Balance start-->
+    <div class="shadow p-5  col-sm-4" style="background-color:pink;height:450px">
+        <div class="text-center">
+            <h3>Hello,<%= current_user.username%></h3>
+            <h2>Account Number</h2>
+            <h3><%= current_user.account_no%></h3>
+            <br>
+            <br>
+            <h2>Balance</h2>
+            <h3><%= current_user.balance%></h3>
+        </div>
+    </div>
+    <!-- Balance start-->
+    <div class="shadow p-5  col-sm-4" style="background-color:#f6bcf6;height:450px">
+        <div class="text-center">
+            <h2>Last Transaction</h2>
+        </div>
+        <table  class="table" style="overflow-y: auto;height: 350px;">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">From/TO</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @transactions.each do |transaction| %>
+              <tr>
+                <td><%=transaction.created_at.strftime("%d/%m/%Y")%></td>
+                <% if transaction.transaction_type == true %>
+                  <td><%=transaction.receiver_account_no%></td>
+                  <td><lable style="color:red"><%=transaction.amount%></lable></td>
+                <% else %>
+                  <td><%=transaction.receiver_account_no%></td>
+                  <td><lable style="color:green"><%=transaction.amount%></lable></td>
+                <% end %>  
+              </tr>
+            <% end %>  
+           
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+<!-- model for view all transaction -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+            <h2>Transactions</h2>
+        </div>
+        <table  class="table" style="overflow-y: auto;">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">From/TO</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @transactions_all.each do |transaction| %>
+              <tr>
+                <td><%=transaction.created_at%></td>
+                <% if transaction.transaction_type == true %>
+                  <td><%=transaction.receiver_account_no%></td>
+                  <td><lable style="color:red"><%=transaction.amount%></lable></td>
+                <% elsif  transaction.transaction_type == false %>
+                  <td><%=transaction.receiver_account_no%></td>
+                  <td><lable style="color:green"><%=transaction.amount%></lable></td>
+                <% end %>  
+              </tr>
+            <% end %>  
+           
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- model for view all transaction -->
